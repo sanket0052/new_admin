@@ -8,6 +8,15 @@
 
 ##Change Log
 
+### v6.18.0 - 2016-08-25
+- Fix eager loaded model searching function. Fix #698 and #710.
+- Add method to skip pagination. Credits to @Nks PR #707
+- Fix collection filtered total records. If filtered total > total records, use total records.
+
+### v6.17.1 - 2016-08-23
+- Use dompdf v0.7.x.
+- Implement/fix setTotalRecords on collection engine.
+
 ### v6.17.0 - 2016-08-10
 - Add setter and getter for table attributes.
 - PR #688, credits to @ssipos90.
