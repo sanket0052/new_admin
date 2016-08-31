@@ -3,12 +3,12 @@
   return [
 
       'directory_name' => [
-          'ledger' => 'ledger',
+          'ledger' => 'ledgeros',
           'sales' => 'sales',
           'reorder' => 'reorder',
           'stock' => 'stock',
           'price' => 'price',
-          'extra' => 'extra',
+          'extra' => 'ledger',
       ],
 
       'report_title' => [
@@ -19,9 +19,4 @@
           'price' => 'Price List Report',
           'extra' => 'Ledger Report',
       ],
-
-      'logo_dir' => [
-          'logo' => 'logo',
-      ],
-
   ];

@@ -45,7 +45,7 @@ function verd()
     die();
 }
 
-function generateHtml(&$getdata, $args, $ret = 0)
+function generateHtml(&$getdata, $args, $type, $ret = 0)
 {
 	/*$getdata .= '<ol class="dd-list">';
     foreach ($args as $key => $value) {
@@ -81,9 +81,9 @@ function generateHtml(&$getdata, $args, $ret = 0)
                                     <i class="md md-add"></i>
                                 </span>
                             </a>';
-			generateHtml($getdata, $value, $ret);
+			generateHtml($getdata, $value, $type,$ret);
 		}else{
-		    $getdata .= '<li><a href="'.url("admin/report/view/".$key) .'"><i class="fa fa-file-excel-o"></i><span>'.$key.'</span></a></li>';
+		    $getdata .= '<li><a href="'.url("admin/report/view/".$type."/".$key) .'"><i class="fa fa-file-excel-o"></i><span>'.$key.'</span></a></li>';
 		}
 	}
 	$getdata .= '</ul>';

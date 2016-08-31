@@ -10,44 +10,46 @@
       <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title">{{ isset($data) ? $type.' File Listing' : $file }}</h3></div>
         <div class="panel-body">
-          @if(isset($data) && !empty($data))
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <div id="sidebar-menu">
-                  {{ generateHtml($getData, $data) }}
-                  {!! $getData !!}
-                  <!-- <ul>
-                    <li class="has_sub">
-                      <a href="javascript:void(0);" class="waves-effect"><i class="md md-share"></i><span>Multi Level </span><span class="pull-right"><i class="md md-add"></i></span></a>
-                      <ul>
-                        <li class="has_sub">
-                          <a href="javascript:void(0);" class="waves-effect"><span>Menu Level 1.1</span> <span class="pull-right"><i class="md md-add"></i></span></a>
-                          <ul style="">
-                            <li><a href="javascript:void(0);"><span>Menu Level 2.1</span></a></li>
-                            <li><a href="javascript:void(0);"><span>Menu Level 2.2</span></a></li>
-                            <li><a href="javascript:void(0);"><span>Menu Level 2.3</span></a></li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);"><span>Menu Level 1.2</span></a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul> -->
+          @if($listing == true)
+            @if(isset($data) && !empty($data))
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div id="sidebar-menu">
+                    {{ generateHtml($getData, $data, $type) }}
+                    {!! $getData !!}
+                    <!-- <ul>
+                      <li class="has_sub">
+                        <a href="javascript:void(0);" class="waves-effect"><i class="md md-share"></i><span>Multi Level </span><span class="pull-right"><i class="md md-add"></i></span></a>
+                        <ul>
+                          <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><span>Menu Level 1.1</span> <span class="pull-right"><i class="md md-add"></i></span></a>
+                            <ul style="">
+                              <li><a href="javascript:void(0);"><span>Menu Level 2.1</span></a></li>
+                              <li><a href="javascript:void(0);"><span>Menu Level 2.2</span></a></li>
+                              <li><a href="javascript:void(0);"><span>Menu Level 2.3</span></a></li>
+                            </ul>
+                          </li>
+                          <li>
+                            <a href="javascript:void(0);"><span>Menu Level 1.2</span></a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul> -->
+                    <div class="clearfix"></div>
+                  </div>
                   <div class="clearfix"></div>
                 </div>
-                <div class="clearfix"></div>
               </div>
-            </div>
-          @else
-            <p>No Directory Exist.</p>
+            @else
+              <p>No Directory Exist.</p>
+            @endif
           @endif
           @if(isset($dataExcel))
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="table-responsive">
                   <table class="table">
-                    @if($type == 'ledger')
+                    @if($type == 'ledgeros')
                       @foreach ($dataExcel as $key => $value)
                         <tbody> 
                           @foreach ($value as $ke => $va)
@@ -96,7 +98,7 @@
                           </tr>
                         @endforeach
                       <tbody>
-                    @elseif($type == 'extra')
+                    @elseif($type == 'ledger')
                       <tbody>
                         @foreach ($dataExcel as $key => $value)
                           @if($key==0)

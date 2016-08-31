@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
@@ -106,7 +107,7 @@ class ReportsController extends Controller
                     echo 'Your are not authorized';
                 }
                 break;
-            case 'ledger':
+            case 'ledgeros':
                 $data = $this->ledgerOSReport();
                 return view('admin.reports.report', [
                     'listing' => true,
@@ -122,7 +123,7 @@ class ReportsController extends Controller
                     'type' => $type
                 ]);
                 break;
-            case 'extra':
+            case 'ledger':
                 $data = $this->ledgerReport();
                 return view('admin.reports.report', [
                     'listing' => true,
@@ -216,15 +217,10 @@ class ReportsController extends Controller
         $companyDirectory = \Auth::user()->load('company');
         $filesName = [];
         if(!empty($companyDirectory->company->first()->directory_name) && !empty($companyDirectory->directory_name)){
-            $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/ledger/'.$companyDirectory->directory_name;
-            $files = File::allFiles($path);
-            foreach ($files as $file)
-            {
-                $pathInfo = pathinfo($file);
-                $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
-            }
+            $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/ledgeros/'.$companyDirectory->directory_name;
+            $files = $this->getDirectoriesAndFiles($path);
         }
-        return $filesName;
+        return array_sort_recursive($files);
     }
     
     public function stockSummaryReport()
@@ -233,14 +229,9 @@ class ReportsController extends Controller
         $filesName = [];
         if(!empty($companyDirectory->company->first()->directory_name) && !empty($companyDirectory->directory_name)){
             $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/stock/'.$companyDirectory->directory_name;
-            $files = File::allFiles($path);
-            foreach ($files as $file)
-            {
-                $pathInfo = pathinfo($file);
-                $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
-            }
+            $files = $this->getDirectoriesAndFiles($path);
         }
-        return $filesName;
+        return array_sort_recursive($files);
     }
 
     public function ledgerReport()
@@ -248,15 +239,10 @@ class ReportsController extends Controller
         $companyDirectory = \Auth::user()->load('company');
         $filesName = [];
         if(!empty($companyDirectory->company->first()->directory_name) && !empty($companyDirectory->directory_name)){
-            $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/extra/'.$companyDirectory->directory_name;
-            $files = File::allFiles($path);
-            foreach ($files as $file)
-            {
-                $pathInfo = pathinfo($file);
-                $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
-            }
+            $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/ledger/'.$companyDirectory->directory_name;
+            $files = $this->getDirectoriesAndFiles($path);
         }
-        return $filesName;
+        return array_sort_recursive($files);
     }
 
     public function salesReport()
@@ -265,14 +251,9 @@ class ReportsController extends Controller
         $filesName = [];
         if(!empty($companyDirectory->company->first()->directory_name) && !empty($companyDirectory->directory_name)){
             $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/sales/'.$companyDirectory->directory_name;
-            $files = File::allFiles($path);
-            foreach ($files as $file)
-            {
-                $pathInfo = pathinfo($file);
-                $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
-            }
+            $files = $this->getDirectoriesAndFiles($path);
         }
-        return $filesName;
+        return array_sort_recursive($files);
     }
 
     public function reorderReport()
@@ -281,14 +262,9 @@ class ReportsController extends Controller
         $filesName = [];
         if(!empty($companyDirectory->company->first()->directory_name) && !empty($companyDirectory->directory_name)){
             $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/reorder/'.$companyDirectory->directory_name;
-            $files = File::allFiles($path);
-            foreach ($files as $file)
-            {
-                $pathInfo = pathinfo($file);
-                $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
-            }
+            $files = $this->getDirectoriesAndFiles($path);
         }
-        return $filesName;
+        return array_sort_recursive($files);
     }
 
     public function priceReport()
@@ -297,14 +273,9 @@ class ReportsController extends Controller
         $filesName = [];
         if(!empty($companyDirectory->company->first()->directory_name) && !empty($companyDirectory->directory_name)){
             $path = storage_path('app/public/').$companyDirectory->company->first()->directory_name.'/price/'.$companyDirectory->directory_name;
-            $files = File::allFiles($path);
-            foreach ($files as $file)
-            {
-                $pathInfo = pathinfo($file);
-                $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
-            }
+            $files = $this->getDirectoriesAndFiles($path);
         }
-        return $filesName;
+        return array_sort_recursive($files);
     }
 
     public function viewReports($type, $file)
@@ -322,5 +293,37 @@ class ReportsController extends Controller
             'file' => $file,
             'type' => $type
         ]);
+    }
+
+    public function getDirectoriesAndFiles($path)
+    {
+        $directories = $this->isDirectory($path);
+
+        $files = File::allFiles($path);
+
+        foreach ($files as $file)
+        {
+            $pathInfo = pathinfo($file);
+            $directory = array_values(explode('/', $pathInfo['dirname']));
+            if(!in_array(end($directory), $directories)){
+                if($pathInfo['dirname']  == $path){
+                    $filesName[$pathInfo['basename']] = $pathInfo['dirname'];
+                }
+            }else{
+                $filesName[end($directory)] = $this->getDirectoriesAndFiles($pathInfo['dirname']);
+            }
+        }
+        return array_sort_recursive($files);
+    }
+
+    public function isDirectory($path)
+    {
+        $directories = File::directories($path);
+        $dir = [];
+        foreach ($directories as $key => $value) {
+            $directory = array_values(explode('/', $value));
+            $dir[] = end($directory);
+        }
+        return $dir;
     }
 }

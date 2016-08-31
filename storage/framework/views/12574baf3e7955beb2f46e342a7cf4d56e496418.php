@@ -1,16 +1,44 @@
+<?php $__env->startSection('css'); ?>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
   <!-- Form-validation -->
   <div class="row">
     <div class="col-sm-12">
       <div class="panel panel-default">
-        <div class="panel-heading"><h3 class="panel-title"><?php echo e(isset($data) ? $type.' File Listing' : config('report.report_title.'.$type).' - '.$file); ?></h3></div>
+        <div class="panel-heading"><h3 class="panel-title"><?php echo e(isset($data) ? $type.' File Listing' : $file); ?></h3></div>
         <div class="panel-body">
           <?php if($listing == true): ?>
             <?php if(isset($data) && !empty($data)): ?>
-              <div class="list-group">
-                  <?php foreach($data as $key => $value): ?>
-                    <a href="<?php echo e(url('admin/report/view/'.$type.'/'.$key)); ?>" class="list-group-item"><?php echo e($key); ?></a>
-                  <?php endforeach; ?>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div id="sidebar-menu">
+                    <?php echo e(generateHtml($getData, $data, $type)); ?>
+
+                    <?php echo $getData; ?>
+
+                    <!-- <ul>
+                      <li class="has_sub">
+                        <a href="javascript:void(0);" class="waves-effect"><i class="md md-share"></i><span>Multi Level </span><span class="pull-right"><i class="md md-add"></i></span></a>
+                        <ul>
+                          <li class="has_sub">
+                            <a href="javascript:void(0);" class="waves-effect"><span>Menu Level 1.1</span> <span class="pull-right"><i class="md md-add"></i></span></a>
+                            <ul style="">
+                              <li><a href="javascript:void(0);"><span>Menu Level 2.1</span></a></li>
+                              <li><a href="javascript:void(0);"><span>Menu Level 2.2</span></a></li>
+                              <li><a href="javascript:void(0);"><span>Menu Level 2.3</span></a></li>
+                            </ul>
+                          </li>
+                          <li>
+                            <a href="javascript:void(0);"><span>Menu Level 1.2</span></a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul> -->
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
               </div>
             <?php else: ?>
               <p>No Directory Exist.</p>
@@ -21,7 +49,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="table-responsive">
                   <table class="table">
-                    <?php if($type == 'ledger'): ?>
+                    <?php if($type == 'ledgeros'): ?>
                       <?php foreach($dataExcel as $key => $value): ?>
                         <tbody> 
                           <?php foreach($value as $ke => $va): ?>
@@ -70,7 +98,7 @@
                           </tr>
                         <?php endforeach; ?>
                       <tbody>
-                    <?php elseif($type == 'extra'): ?>
+                    <?php elseif($type == 'ledger'): ?>
                       <tbody>
                         <?php foreach($dataExcel as $key => $value): ?>
                           <?php if($key==0): ?>
